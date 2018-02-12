@@ -25,7 +25,7 @@ Response msg string will be one of the following:
 ---
 #### Installation
 ```
-npm install react-native-sms-x --save
+yarn add git+ssh://git@github.com:adamgajzlerowicz/react-native-sms-x.git
 ```
 ---
 ##### **Android Setup**
