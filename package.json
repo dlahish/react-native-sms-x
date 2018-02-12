@@ -12,9 +12,5 @@
     "url": "git+https://github.com/yeyintkoko/react-native-sms-x.git"
   },
   "author": "Ye Yint Ko Ko",
-  "license": "ISC",
-  "devdependencies": {
-    "react": ">=15.3.2",
-    "react-native": ">=0.36.1"
-  }
+  "license": "ISC"
 }
