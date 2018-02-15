@@ -47,11 +47,9 @@ public class SendSMS extends ReactContextBaseJavaModule {
             String SENT = "SMS_SENT";
             String DELIVERED = "SMS_DELIVERED";
 
-            PendingIntent sentPI = PendingIntent.getBroadcast(reactContext, 0,
-                    new Intent(SENT), 0);
+            PendingIntent sentPI = PendingIntent.getBroadcast(reactContext, 0, new Intent(SENT), 0);
 
-            PendingIntent deliveredPI = PendingIntent.getBroadcast(reactContext, 0,
-                    new Intent(DELIVERED), 0);
+            PendingIntent deliveredPI = PendingIntent.getBroadcast(reactContext, 0, new Intent(DELIVERED), 0);
 
             //---when the SMS has been sent---
             reactContext.registerReceiver(new BroadcastReceiver(){
@@ -82,16 +80,17 @@ public class SendSMS extends ReactContextBaseJavaModule {
             reactContext.registerReceiver(new BroadcastReceiver(){
                 @Override
                 public void onReceive(Context arg0, Intent arg1) {
+                    sendCallback(99, getResultCode());
                     switch (getResultCode())
                     {
                         case Activity.RESULT_OK:
-                            System.out.println("SMS delivered");
                             sendCallback(messageId, "SMS delivered");
                             break;
                         case Activity.RESULT_CANCELED:
-                            System.out.println("SMS not delivered");
                             sendCallback(messageId, "SMS not delivered");
                             break;
+                        default:
+                            sendCallback(messageId, getResultCode());
                     }
                 }
             }, new IntentFilter(DELIVERED));
