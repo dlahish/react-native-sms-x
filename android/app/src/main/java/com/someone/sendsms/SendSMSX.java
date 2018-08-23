@@ -16,18 +16,18 @@ import com.facebook.react.bridge.ReactMethod;
  * Created by yeyintkoko on 11/4/16.
  */
 
-public class SendSMS extends ReactContextBaseJavaModule {
+public class SendSMSX extends ReactContextBaseJavaModule {
     private final ReactApplicationContext reactContext;
     private Callback callback = null;
 
-    public SendSMS(ReactApplicationContext reactContext) {
+    public SendSMSX(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
     }
 
     @Override
     public String getName() {
-        return "SendSMS";
+        return "SendSMSX";
     }
 
     private void sendCallback(Integer messageId, String message){

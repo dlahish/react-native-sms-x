@@ -14,12 +14,12 @@ import java.util.List;
  * Created by yeyintkoko on 11/4/16.
  */
 
-public class SendSMSPackage implements ReactPackage {
+public class SendSMSXPackage implements ReactPackage {
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
 
-        modules.add(new SendSMS(reactContext));
+        modules.add(new SendSMSX(reactContext));
 
         return modules;
     }

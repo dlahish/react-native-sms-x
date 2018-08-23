@@ -1,14 +1,14 @@
 ## react-native-sms-x
 ***
-**SendSMS**
+**SendSMSX**
 
 > ##### A react-native api to send SMS messages. It works only for android. This component used android native api to send sms and response a callback to react-native. This react-native component desn't link to the mobile default messenger view. It will programmatically send the message to a phone number which is provided as a parameter and will response a callback with a string indicating message was sent or failure or no service.
 
 *usage*
 ```js
-import SendSMS from 'react-native-sms-x';
+import SendSMSX from 'react-native-sms-x';
 // you can put any number as Id to identify which message being process 
-SendSMS.send(123, "+959254687254", "Hey.., this is me!\nGood to see you. Have a nice day.", (msg)=>{ alert(msg) });
+SendSMSX.send(123, "+959254687254", "Hey.., this is me!\nGood to see you. Have a nice day.", (msg)=>{ alert(msg) });
 ```
 
 Response msg string will be one of the following:
@@ -97,11 +97,11 @@ import {
   TouchableOpacity,
   ToastAndroid
 } from 'react-native';
-import SendSMS from 'react-native-sms-x';
+import SendSMSX from 'react-native-sms-x';
 
 export default class RNSMS extends Component {
   sendSMSFunction() {
-    SendSMS.send(666, "+95912345678", "Hey.., this is me!\nGood to see you. Have a nice day.",
+    SendSMSX.send(666, "+95912345678", "Hey.., this is me!\nGood to see you. Have a nice day.",
       (id, msg)=>{
         ToastAndroid.show(msg, ToastAndroid.SHORT);
       }
