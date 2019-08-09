@@ -11,6 +11,8 @@ import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import android.os.Handler;
+// import android.util.Log;
 
 /**
  * Created by yeyintkoko on 11/4/16.
@@ -19,6 +21,10 @@ import com.facebook.react.bridge.ReactMethod;
 public class SendSMSX extends ReactContextBaseJavaModule {
     private final ReactApplicationContext reactContext;
     private Callback callback = null;
+    private Handler handler = null;
+    private Runnable runnable = null;
+
+    // public static final String LOG_TAG = "nadav";
 
     public SendSMSX(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -46,6 +52,13 @@ public class SendSMSX extends ReactContextBaseJavaModule {
             this.callback = cb;
             String SENT = "SMS_SENT";
             String DELIVERED = "SMS_DELIVERED";
+            this.runnable = new Runnable() {
+                public void run() {
+                    sendCallback(messageId, "Unknown error");
+                }
+            };
+            this.handler = new android.os.Handler();
+            handler.postDelayed(runnable, 8000);
 
             PendingIntent sentPI = PendingIntent.getBroadcast(reactContext, 0,
                     new Intent(SENT), 0);
@@ -54,9 +67,12 @@ public class SendSMSX extends ReactContextBaseJavaModule {
                     new Intent(DELIVERED), 0);
 
             //---when the SMS has been sent---
-            reactContext.registerReceiver(new BroadcastReceiver(){
+            IntentFilter intentFilterSent = new IntentFilter(SENT);
+            BroadcastReceiver broadcastReceiverSent = new BroadcastReceiver(){
                 @Override
                 public void onReceive(Context arg0, Intent arg1) {
+                    Log.e(LOG_TAG, "SendSMSX onReceive sent");
+                    handler.removeCallbacks(runnable);
                     switch (getResultCode())
                     {
                         case Activity.RESULT_OK:
@@ -76,12 +92,17 @@ public class SendSMSX extends ReactContextBaseJavaModule {
                             break;
                     }
                 }
-            }, new IntentFilter(SENT));
+            };
+            intentFilterSent.setPriority(Integer.MAX_VALUE);
+            reactContext.registerReceiver(broadcastReceiverSent, intentFilterSent);
 
             //---when the SMS has been delivered---
-            reactContext.registerReceiver(new BroadcastReceiver(){
+            IntentFilter intentFilterDelivered = new IntentFilter(SENT);
+            BroadcastReceiver broadcastReceiverDelivered = new BroadcastReceiver(){
                 @Override
                 public void onReceive(Context arg0, Intent arg1) {
+                    Log.e(LOG_TAG, "SendSMSX onReceive received");
+                    handler.removeCallbacks(runnable);
                     switch (getResultCode())
                     {
                         case Activity.RESULT_OK:
@@ -94,7 +115,9 @@ public class SendSMSX extends ReactContextBaseJavaModule {
                             break;
                     }
                 }
-            }, new IntentFilter(DELIVERED));
+            };
+            intentFilterDelivered.setPriority(Integer.MAX_VALUE);
+            reactContext.registerReceiver(broadcastReceiverDelivered, intentFilterDelivered);
 
             SmsManager sms = SmsManager.getDefault();
             sms.sendTextMessage(phoneNumber, null, message, sentPI, deliveredPI);
