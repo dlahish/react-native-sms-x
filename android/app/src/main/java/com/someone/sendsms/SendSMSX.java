@@ -71,7 +71,6 @@ public class SendSMSX extends ReactContextBaseJavaModule {
             BroadcastReceiver broadcastReceiverSent = new BroadcastReceiver(){
                 @Override
                 public void onReceive(Context arg0, Intent arg1) {
-                    Log.e(LOG_TAG, "SendSMSX onReceive sent");
                     handler.removeCallbacks(runnable);
                     switch (getResultCode())
                     {
@@ -101,7 +100,6 @@ public class SendSMSX extends ReactContextBaseJavaModule {
             BroadcastReceiver broadcastReceiverDelivered = new BroadcastReceiver(){
                 @Override
                 public void onReceive(Context arg0, Intent arg1) {
-                    Log.e(LOG_TAG, "SendSMSX onReceive received");
                     handler.removeCallbacks(runnable);
                     switch (getResultCode())
                     {
