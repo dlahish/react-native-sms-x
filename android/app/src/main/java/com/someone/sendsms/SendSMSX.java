@@ -54,11 +54,11 @@ public class SendSMSX extends ReactContextBaseJavaModule {
             String DELIVERED = "SMS_DELIVERED";
             this.runnable = new Runnable() {
                 public void run() {
-                    sendCallback(messageId, "Unknown error timout");
+                    sendCallback(messageId, "Unknown error timeout");
                 }
             };
             this.handler = new android.os.Handler();
-            handler.postDelayed(runnable, 15000);
+            handler.postDelayed(runnable, 35000);
 
             PendingIntent sentPI = PendingIntent.getBroadcast(reactContext, 0,
                     new Intent(SENT), 0);
@@ -92,7 +92,7 @@ public class SendSMSX extends ReactContextBaseJavaModule {
                     }
                 }
             };
-            intentFilterSent.setPriority(Integer.MAX_VALUE);
+            // intentFilterSent.setPriority(Integer.MAX_VALUE);
             reactContext.registerReceiver(broadcastReceiverSent, intentFilterSent);
 
             //---when the SMS has been delivered---
@@ -114,7 +114,7 @@ public class SendSMSX extends ReactContextBaseJavaModule {
                     }
                 }
             };
-            intentFilterDelivered.setPriority(Integer.MAX_VALUE);
+            // intentFilterDelivered.setPriority(Integer.MAX_VALUE);
             reactContext.registerReceiver(broadcastReceiverDelivered, intentFilterDelivered);
 
             SmsManager sms = SmsManager.getDefault();
