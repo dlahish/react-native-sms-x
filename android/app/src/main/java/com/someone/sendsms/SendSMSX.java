@@ -54,11 +54,11 @@ public class SendSMSX extends ReactContextBaseJavaModule {
             String DELIVERED = "SMS_DELIVERED";
             this.runnable = new Runnable() {
                 public void run() {
-                    sendCallback(messageId, "Unknown error");
+                    sendCallback(messageId, "Unknown error timout");
                 }
             };
             this.handler = new android.os.Handler();
-            handler.postDelayed(runnable, 8000);
+            handler.postDelayed(runnable, 15000);
 
             PendingIntent sentPI = PendingIntent.getBroadcast(reactContext, 0,
                     new Intent(SENT), 0);
