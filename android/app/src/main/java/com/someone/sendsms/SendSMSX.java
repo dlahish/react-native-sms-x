@@ -89,6 +89,8 @@ public class SendSMSX extends ReactContextBaseJavaModule {
                         case SmsManager.RESULT_ERROR_RADIO_OFF:
                             sendCallback(messageId, "Radio off");
                             break;
+                        default:
+                            sendCallback(messageId, "Default unknown");
                     }
                 }
             };
@@ -100,7 +102,6 @@ public class SendSMSX extends ReactContextBaseJavaModule {
             BroadcastReceiver broadcastReceiverDelivered = new BroadcastReceiver(){
                 @Override
                 public void onReceive(Context arg0, Intent arg1) {
-                    handler.removeCallbacks(runnable);
                     switch (getResultCode())
                     {
                         case Activity.RESULT_OK:
