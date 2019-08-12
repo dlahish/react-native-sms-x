@@ -51,22 +51,17 @@ public class SendSMSX extends ReactContextBaseJavaModule {
 
             this.callback = cb;
             String SENT = "SMS_SENT";
-            String DELIVERED = "SMS_DELIVERED";
             this.runnable = new Runnable() {
                 public void run() {
                     sendCallback(messageId, "Unknown error timeout");
                 }
             };
             this.handler = new android.os.Handler();
-            handler.postDelayed(runnable, 35000);
+            handler.postDelayed(runnable, 10000);
 
             PendingIntent sentPI = PendingIntent.getBroadcast(reactContext, 0,
                     new Intent(SENT), 0);
 
-            PendingIntent deliveredPI = PendingIntent.getBroadcast(reactContext, 0,
-                    new Intent(DELIVERED), 0);
-
-            //---when the SMS has been sent---
             IntentFilter intentFilterSent = new IntentFilter(SENT);
             BroadcastReceiver broadcastReceiverSent = new BroadcastReceiver(){
                 @Override
@@ -92,42 +87,16 @@ public class SendSMSX extends ReactContextBaseJavaModule {
                         default:
                             sendCallback(messageId, "Default unknown");
                     }
+                    reactContext.unregisterReceiver(this);
                 }
             };
-            // intentFilterSent.setPriority(Integer.MAX_VALUE);
+            
             reactContext.registerReceiver(broadcastReceiverSent, intentFilterSent);
-
-            //---when the SMS has been delivered---
-            IntentFilter intentFilterDelivered = new IntentFilter(SENT);
-            BroadcastReceiver broadcastReceiverDelivered = new BroadcastReceiver(){
-                @Override
-                public void onReceive(Context arg0, Intent arg1) {
-                    switch (getResultCode())
-                    {
-                        case Activity.RESULT_OK:
-                            System.out.println("SMS delivered");
-                            sendCallback(messageId, "SMS delivered");
-                            break;
-                        case Activity.RESULT_CANCELED:
-                            System.out.println("SMS not delivered");
-                            sendCallback(messageId, "SMS not delivered");
-                            break;
-                    }
-                }
-            };
-            // intentFilterDelivered.setPriority(Integer.MAX_VALUE);
-            reactContext.registerReceiver(broadcastReceiverDelivered, intentFilterDelivered);
-
             SmsManager sms = SmsManager.getDefault();
-            sms.sendTextMessage(phoneNumber, null, message, sentPI, deliveredPI);
+            sms.sendTextMessage(phoneNumber, null, message, sentPI, null);
 
-        }catch (Exception e) {
-
+        } catch (Exception e) {
             sendCallback(messageId, "Unknown error");
-            throw e;
-
         }
-
     }
-
 }
