@@ -12,6 +12,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import android.os.Handler;
+import java.util.ArrayList;
 // import android.util.Log;
 
 /**
@@ -92,9 +93,17 @@ public class SendSMSX extends ReactContextBaseJavaModule {
             };
             
             reactContext.registerReceiver(broadcastReceiverSent, intentFilterSent);
-            SmsManager sms = SmsManager.getDefault();
-            sms.sendTextMessage(phoneNumber, null, message, sentPI, null);
 
+            SmsManager manager = SmsManager.getDefault();
+
+            ArrayList<PendingIntent> sentPendingIntents = new ArrayList<PendingIntent>();
+            ArrayList<String> parts = manager.divideMessage(message);
+            for (int i = 0; i < parts.size(); i++) {
+                sentPendingIntents.add(i, sentPI);
+            }
+
+            manager.sendMultipartTextMessage(phoneNumber, null, parts, sentPendingIntents, null);
+            
         } catch (Exception e) {
             sendCallback(messageId, "Unknown error");
         }
